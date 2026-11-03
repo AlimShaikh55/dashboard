@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azraah Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2A0F33; --ink2:#3D1747; --gold:#C9973F; --gold-l:#F5E6C4;
+  --bg:#F3F1F6; --card:#FFFFFF; --line:#E6E0EA; --line2:#D6CEDC;
+  --tx:#1F1724; --tx2:#5C5065; --tx3:#8A8092;
+  --pend:#B86E0B; --pend-b:#FDF0DC; --conf:#6B2A72; --conf-b:#F3E7F5;
+  --deliv:#2B7148; --deliv-b:#E3F2E8; --canc:#7E7586; --canc-b:#EDEAF0;
+  --red:#B3261E; --red-b:#FCE8E6;
+  --r:12px; --r-s:8px;
+  --shadow:0 1px 2px rgba(42,15,51,.06),0 4px 16px rgba(42,15,51,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+a{color:var(--conf)}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.side{background:var(--ink);color:#EDE3F0;display:flex;flex-direction:column;padding:22px 14px;position:sticky;top:0;height:100vh}
+.brand{padding:0 10px 22px}
+.brand b{display:block;font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold)}
+.brand small{font-size:12px;color:#BFAFC6}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;border:none;background:none;color:#D9CCDF;padding:10px 12px;border-radius:var(--r-s);font-size:14px;font-weight:500;text-align:left;position:relative}
+.nav button svg{width:18px;height:18px;flex-shrink:0;opacity:.85}
+.nav button:hover{background:rgba(255,255,255,.06)}
+.nav button.on{background:rgba(201,151,63,.14);color:#fff}
+.nav button.on::before{content:'';position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
+.nav .ct{margin-left:auto;background:var(--gold);color:var(--ink);font-size:11px;font-weight:700;border-radius:20px;padding:1px 7px}
+.side-foot{margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#BFAFC6;line-height:1.6}
+.side-foot a{color:var(--gold-l)}
+main{min-width:0;padding:26px 32px 60px}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.top h1{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--ink);line-height:1}
+.top .sp{flex:1}
+.upd{font-size:12px;color:var(--tx3)}
+.demo{background:var(--gold-l);color:#5A3E07;border-radius:var(--r-s);padding:9px 12px;font-size:13px;margin-bottom:18px}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 15px;border-radius:var(--r-s);border:1px solid var(--line2);background:#fff;font-weight:600;font-size:13.5px;color:var(--tx);white-space:nowrap}
+.btn:hover{border-color:var(--tx3)}
+.btn.p{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.p:hover{background:var(--ink2)}
+.btn.g{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.btn.d{color:var(--red);border-color:#EBC5C1}
+.btn.s{height:32px;padding:0 11px;font-size:12.5px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn svg{width:16px;height:16px}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line2);border-radius:var(--r-s);padding:3px}
+.seg button{border:none;background:none;padding:6px 11px;border-radius:6px;font-size:13px;font-weight:600;color:var(--tx2)}
+.seg button.on{background:var(--ink);color:#fff}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1px solid var(--line2);background:#fff;border-radius:20px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--tx2);display:inline-flex;gap:6px;align-items:center}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip i{font-style:normal;font-weight:700;opacity:.7}
+.search{height:38px;border:1px solid var(--line2);border-radius:var(--r-s);padding:0 12px;background:#fff;min-width:220px}
+label.f{display:block;font-size:12.5px;font-weight:600;color:var(--tx2);margin:14px 0 6px}
+.in{width:100%;height:40px;border:1px solid var(--line2);border-radius:var(--r-s);padding:0 11px;background:#fff}
+textarea.in{height:auto;min-height:150px;padding:10px 11px;line-height:1.55;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.check{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:13.5px;color:var(--tx2)}
+.check input{width:17px;height:17px;accent-color:var(--ink)}
+.hint{font-size:12px;color:var(--tx3);margin-top:5px;line-height:1.45}
+
+/* ---------- panels ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.panel-h{display:flex;align-items:center;gap:10px;padding:16px 18px 0}
+.panel-h h2{font-size:15px;font-weight:700}
+.panel-h .sp{flex:1}
+.panel-b{padding:14px 18px 18px}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;margin-top:18px}
+.grid2.even{grid-template-columns:1fr 1fr}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.toolbar .sp{flex:1}
+
+/* overview hero */
+.hero{padding:22px 24px 0}
+.hero p.lead{font-family:'Cormorant Garamond',serif;font-size:44px;line-height:1.05;color:var(--ink);font-weight:700;max-width:22ch}
+.hero p.sub{color:var(--tx2);margin-top:8px}
+.ledger{display:grid;grid-template-columns:repeat(5,1fr);margin-top:20px;border-top:1px solid var(--line)}
+.ledger div{padding:14px 24px 18px;border-right:1px solid var(--line)}
+.ledger div:last-child{border-right:none}
+.ledger b{display:block;font-size:22px;font-weight:700;color:var(--tx)}
+.ledger span{font-size:12.5px;color:var(--tx3)}
+.ledger .warn b{color:var(--pend)}
+
+/* attention list */
+.todo{display:flex;flex-direction:column}
+.todo button{display:flex;align-items:center;gap:12px;border:none;background:none;text-align:left;padding:11px 0;border-bottom:1px solid var(--line)}
+.todo button:last-child{border-bottom:none}
+.todo .ic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.todo .tx{flex:1;min-width:0}
+.todo .tx b{display:block;font-size:14px}
+.todo .tx small{color:var(--tx3);font-size:12.5px}
+.todo .go{color:var(--tx3);font-size:18px}
+.empty{color:var(--tx3);padding:22px 4px;text-align:center;line-height:1.6}
+
+/* tables */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:12px;font-weight:600;color:var(--tx3);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .r{text-align:right}
+.tbl tbody tr.click{cursor:pointer}
+.tbl tbody tr.click:hover{background:#FAF8FB}
+.tbl small{color:var(--tx3);font-size:12px}
+.scroll{overflow-x:auto}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:20px;padding:3px 9px;white-space:nowrap}
+.st-Pending{background:var(--pend-b);color:var(--pend)}
+.st-Confirmed{background:var(--conf-b);color:var(--conf)}
+.st-Packed{background:var(--conf-b);color:var(--conf)}
+.st-Delivered{background:var(--deliv-b);color:var(--deliv)}
+.st-Cancelled{background:var(--canc-b);color:var(--canc)}
+.pay-Paid{background:var(--deliv-b);color:var(--deliv)}
+.pay-Unpaid{background:var(--red-b);color:var(--red)}
+.lv-ok{background:var(--deliv-b);color:var(--deliv)}
+.lv-low{background:var(--pend-b);color:var(--pend)}
+.lv-out{background:var(--red-b);color:var(--red)}
+.lv-na{background:var(--canc-b);color:var(--canc)}
+.seg-pill{background:#F1ECF4;color:var(--ink2)}
+.bar{height:6px;border-radius:4px;background:#EFEAF2;overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;background:var(--deliv)}
+.bar.low i{background:var(--pend)}
+.bar.out i{background:var(--red)}
+.tog{position:relative;width:40px;height:23px;border-radius:20px;border:none;background:#D6CEDC;flex-shrink:0;transition:background .2s}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tog.on{background:var(--deliv)}
+.tog.on::after{transform:translateX(17px)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(31,23,36,.35);opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s linear .2s;z-index:40}
+.scrim.on{opacity:1;visibility:visible;transition:opacity .2s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:#fff;z-index:41;transform:translateX(102%);transition:transform .28s cubic-bezier(.3,.7,.3,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(42,15,51,.18)}
+.drawer.on{transform:none}
+.dr-h{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.dr-h h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--ink);line-height:1.1}
+.dr-h .sp{flex:1}
+.x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:#fff;font-size:20px;line-height:1}
+.dr-b{flex:1;overflow-y:auto;padding:6px 22px 24px}
+.dr-f{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;background:#FCFBFD}
+.sec{padding:16px 0;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:none}
+.sec h4{font-size:12.5px;font-weight:700;color:var(--tx3);margin-bottom:9px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv span{color:var(--tx3)}
+.contact{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.lines td{padding:8px 0;border-bottom:1px dashed var(--line)}
+.lines tr.t td{border-bottom:none;font-weight:700;padding-top:10px}
+.statusbar{display:flex;gap:6px;flex-wrap:wrap}
+.itemrow{display:grid;grid-template-columns:1fr 120px 36px;gap:8px;margin-bottom:8px}
+.itemrow .x{width:36px;height:40px;border-radius:var(--r-s)}
+.sum{background:#FAF8FB;border-radius:var(--r-s);padding:12px 14px;margin-top:12px;font-size:14px}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}
+.sum .t{font-weight:700;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+
+/* email */
+.mail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.preview{width:100%;height:640px;border:1px solid var(--line);border-radius:var(--r-s);background:#FDF6EC}
+.reclist{max-height:120px;overflow:auto;border:1px solid var(--line);border-radius:var(--r-s);padding:6px 8px;margin-top:8px;font-size:12.5px;color:var(--tx2);line-height:1.7}
+.merge{display:flex;gap:6px;margin-top:6px}
+.merge button{border:1px dashed var(--line2);background:#fff;border-radius:6px;padding:3px 8px;font-size:12px;color:var(--tx2)}
+.picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.picks label{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line2);border-radius:20px;padding:4px 10px;font-size:12.5px;background:#fff}
+.picks input{accent-color:var(--ink)}
+
+/* funnel */
+.funnel div{display:grid;grid-template-columns:110px 1fr 54px;align-items:center;gap:10px;margin-bottom:10px;font-size:13px}
+.funnel .b{height:26px;border-radius:6px;background:var(--gold-l);position:relative;overflow:hidden}
+.funnel .b i{position:absolute;inset:0 auto 0 0;background:var(--gold)}
+.funnel span{color:var(--tx2)}
+.funnel b{text-align:right}
+
+/* toast + loading */
+.toast{visibility:hidden;position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:600;z-index:60;transition:transform .3s;max-width:90vw;box-shadow:0 10px 30px rgba(42,15,51,.3)}
+.toast.on{transform:translate(-50%,0);visibility:visible}
+.toast.err{background:var(--red)}
+.loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:70;color:var(--tx2)}
+.loading b{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--ink)}
+.spin{width:28px;height:28px;border-radius:50%;border:3px solid var(--line2);border-top-color:var(--gold);animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.busy{pointer-events:none;opacity:.6}
+
+/* mobile */
+.tabs{display:none}
+.more-menu{display:none}
+@media (max-width:980px){
+  .grid2,.grid2.even,.mail{grid-template-columns:1fr}
+  .ledger{grid-template-columns:repeat(2,1fr)}
+  .ledger div{border-bottom:1px solid var(--line)}
+  .ledger div:nth-child(2n){border-right:none}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  main{padding:16px 14px 96px}
+  .top h1{font-size:30px}
+  .hero{padding:18px 18px 0}
+  .hero p.lead{font-size:34px}
+  .ledger div{padding:12px 18px 14px}
+  .search{min-width:0;flex:1}
+  .tabs{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--ink);z-index:30;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .tabs button{flex:1;border:none;background:none;color:#CDBFD3;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:6px 0;position:relative}
+  .tabs button svg{width:21px;height:21px}
+  .tabs button.on{color:var(--gold)}
+  .tabs .ct{position:absolute;top:0;left:calc(50% + 6px);background:var(--gold);color:var(--ink);font-size:10px;border-radius:10px;padding:0 5px}
+  .more-menu.on{display:block;position:fixed;left:10px;right:10px;bottom:76px;background:#fff;border-radius:14px;z-index:31;box-shadow:0 10px 40px rgba(42,15,51,.25);padding:8px}
+  .more-menu button{display:flex;width:100%;gap:12px;align-items:center;border:none;background:none;padding:13px 12px;font-size:15px;font-weight:600;border-radius:10px}
+  .more-menu svg{width:20px;height:20px;color:var(--ink)}
+  .tbl.cards thead{display:none}
+  .tbl.cards tr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+  .tbl.cards td{border:none;padding:0}
+  .tbl.cards td.hide-m{display:none}
+  .row3{grid-template-columns:1fr 1fr}
+  .preview{height:520px}
+  .drawer{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+#gate{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:var(--bg);padding:16px}
+#gate form{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:24px}
+#gate h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--ink);margin-bottom:4px}
+#gate p{color:var(--tx2);margin-bottom:14px}
+#gate label{display:block;font-weight:600;margin:12px 0 4px}
+#gate input[type=text],#gate input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:var(--r-s);background:#fff}
+#gate .rem{display:flex;gap:8px;align-items:center;margin:12px 0;font-weight:400}
+#gate button{width:100%;padding:11px;border:none;border-radius:var(--r-s);background:var(--ink);color:#fff;font-weight:700}
+#g-err{color:var(--red);min-height:18px;margin-top:10px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="gate"><form onsubmit="gateGo();return false" autocomplete="off"><h2>Azraah</h2><p>Business dashboard. Sign in to continue.</p>
+<label for="g-url">Web app URL</label><input type="text" id="g-url" placeholder="https://script.google.com/macros/s/.../exec" inputmode="url">
+<label for="g-key">Passcode</label><input type="password" id="g-key" autocomplete="current-password">
+<label class="rem"><input type="checkbox" id="g-rem"> Keep me signed in on this device</label>
+<button type="submit">Sign in</button><div id="g-err" role="alert"></div></form></div>
+<div class="loading" id="loading"><b>Azraah</b><div class="spin"></div><span>Opening your sheet&hellip;</span></div>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><b>Azraah</b><small>Business dashboard</small></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot" id="side-foot"></div>
+  </aside>
+  <main>
+    <div id="demo"></div>
+    <div class="top"><h1 id="title">Overview</h1><span class="sp"></span><span class="upd" id="upd"></span>
+      <button class="btn s" onclick="reload()" aria-label="Refresh data from the sheet">Refresh</button></div>
+    <div id="view"></div>
+  </main>
+</div>
+<nav class="tabs" id="tabs"></nav>
+<div class="more-menu" id="more"></div>
+
+<div class="scrim" id="scrim" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title">
+  <div class="dr-h"><h3 id="dr-title"></h3><span class="sp"></span><span id="dr-tag"></span><button class="x" onclick="closeDrawer()" aria-label="Close">&times;</button></div>
+  <div class="dr-b" id="dr-b"></div>
+  <div class="dr-f" id="dr-f"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =================== basics =================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rs = n => '₹' + Math.round(Number(n) || 0).toLocaleString('en-IN');
+const fg = g => { g = Number(g) || 0; return Math.abs(g) >= 1000 ? +(g / 1000).toFixed(2) + ' kg' : g + ' g'; };
+const DAY = 864e5;
+const dt = ms => ms ? new Date(ms).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '–';
+const dtY = ms => ms ? new Date(ms).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '–';
+const ago = ms => { if (!ms) return '–'; const d = Math.floor((Date.now() - ms) / DAY); return d <= 0 ? 'today' : d === 1 ? 'yesterday' : d < 31 ? d + ' days ago' : dt(ms); };
+const toISO = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+const waLink = (ph, text) => { let d = String(ph || '').replace(/\D/g, ''); if (d.length === 10) d = '91' + d; return d ? `https://wa.me/${d}${text ? '?text=' + encodeURIComponent(text) : ''}` : ''; };
+const ACTIVE = s => s === 'Confirmed' || s === 'Packed' || s === 'Delivered';
+const isEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || ''));
+const packs = g => ({ k: Math.floor(g / 1000), h: Math.floor((g % 1000) / 500), q: Math.round((g % 500) / 250) });
+const priceFor = (r, g) => { const p = packs(g); return p.k * (r.p1kg || r.p250 * 4) + p.h * (r.p500 || r.p250 * 2) + p.q * r.p250; };
+
+let D = null;          // raw data from the sheet
+let X = {};            // derived numbers
+const UI = { view:'overview', period:'30', ost:'Pending', oq:'', cseg:'all', cq:'', sel:new Set(), mail:null, mper:'month' };
+
+const ICON = {
+  overview:'<path d="M3 13h7V3H3zm11 8h7V11h-7zM3 21h7v-6H3zm11-12h7V3h-7z"/>',
+  orders:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>',
+  stock:'<path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/>',
+  products:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/>',
+  customers:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  email:'<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm18 2-10 7L2 6"/>',
+  money:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
+};
+const svg = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
+const VIEWS = [
+  ['overview','Overview'], ['orders','Orders'], ['stock','Stock'], ['products','Products'],
+  ['customers','Customers'], ['email','Email'], ['money','Money']
+];
+
+/* =================== talking to the sheet =================== */
+const LIVE = true;
+const CFG = { url: '', key: '' };
+const DEFAULT_URL = ''; // optional: paste your web app /exec URL here so the sign-in box is pre-filled
+function call(action, p){
+  return fetch(CFG.url, { method: 'POST', redirect: 'follow', body: JSON.stringify({ adminKey: CFG.key, action: action, p: p || {} }) })
+    .then(r => r.json())
+    .then(j => { if (!j || j.ok === false) throw new Error((j && j.error) || 'Request failed'); return j; })
+    .catch(e => { throw (e instanceof TypeError ? new Error('Could not reach the shop web app. Check the URL and your internet.') : e); });
+}
+async function reload(){
+  try { const r = await call('load'); setData(r.data); }
+  catch (e) { toast(errMsg(e), true); }
+  finally { $('loading').style.display = 'none'; }
+}
+async function act(action, p, okMsg, btn){
+  if (btn) btn.classList.add('busy');
+  try {
+    const r = await call(action, p);
+    if (r.data) setData(r.data);
+    toast(typeof okMsg === 'function' ? okMsg(r) : okMsg);
+    return r;
+  } catch (e) { toast(errMsg(e), true); throw e; }
+  finally { if (btn) btn.classList.remove('busy'); }
+}
+const errMsg = e => String(e && e.message || e).replace(/^Exception:\s*/, '');
+
+function setData(d){
+  D = d; derive(); renderNav(); render();
+  $('upd').textContent = 'Updated ' + new Date(d.config.loadedAt).toLocaleTimeString('en-IN', { hour:'numeric', minute:'2-digit' });
+  $('side-foot').innerHTML = `Signed in as ${esc(d.config.me)} &middot; <a href="#" onclick="signOut();return false">Sign out</a><br>
+    <a href="${esc(d.config.sheetUrl)}" target="_blank" rel="noopener">Open the Google Sheet</a><br>
+    <a href="${esc(d.config.shopUrl)}" target="_blank" rel="noopener">Open the shop</a>`;
+  $('demo').innerHTML = LIVE ? '' : '<div class="demo">You are looking at sample data. Once this page is added to your Apps Script, it shows and edits your real sheet.</div>';
+}
+
+/* =================== derive numbers =================== */
+function derive(){
+  const orders = D.orders.slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+  const rateBy = {}; D.rates.forEach(r => rateBy[r.item.toLowerCase()] = r);
+
+  // stock: purchases & adjustments in the Stock Ledger, minus what confirmed/delivered orders took out
+  const st = {};
+  const S = name => { const k = name.toLowerCase(); return st[k] || (st[k] = { item:name, inG:0, buyG:0, buyCost:0, soldG:0, resG:0, entries:0 }); };
+  D.rates.forEach(r => S(r.item));
+  D.ledger.forEach(l => { const s = S(l.item); s.inG += l.grams; s.entries++; if (l.grams > 0 && l.cost) { s.buyG += l.grams; s.buyCost += l.cost; } });
+  orders.forEach(o => o.lines.forEach(l => { const s = S(l.item); if (ACTIVE(o.status)) s.soldG += l.grams; else if (o.status === 'Pending') s.resG += l.grams; }));
+  const stock = Object.values(st).map(s => {
+    const reorder = D.reorder[s.item] || D.reorder[Object.keys(D.reorder).find(k => k.toLowerCase() === s.item.toLowerCase())] || 0;
+    const onHand = s.inG - s.soldG, avail = onHand - s.resG, costKg = s.buyG ? s.buyCost / s.buyG * 1000 : 0;
+    const r = rateBy[s.item.toLowerCase()];
+    const tracked = s.entries > 0;
+    const level = !tracked ? 'na' : onHand <= 0 ? 'out' : (avail <= reorder || avail <= 0) ? 'low' : 'ok';
+    return { ...s, onHand, avail, reorder, costKg, rate:r, tracked, level, selling: r && r.available && r.p250 > 0 };
+  }).sort((a, b) => (b.selling - a.selling) || a.item.localeCompare(b.item));
+  const costKg = {}; stock.forEach(s => costKg[s.item.toLowerCase()] = s.costKg);
+
+  // customers: sign-ups + everyone who ordered, matched by email or phone
+  const cust = {}, keyOf = (e, p) => (e && isEmail(e)) ? e.toLowerCase() : (p ? 'p' + String(p).slice(-10) : '');
+  const byPhone = {};
+  const C = (e, p, name) => {
+    let k = keyOf(e, p); if (!k) return null;
+    const pk = p ? String(p).slice(-10) : '';
+    if (!cust[k] && pk && byPhone[pk]) k = byPhone[pk];
+    const c = cust[k] || (cust[k] = { key:k, name:'', email:'', phone:'', orders:[], spend:0, first:null, last:null, signup:null });
+    if (name && !c.name) c.name = name; if (isEmail(e) && !c.email) c.email = e.toLowerCase(); if (p && !c.phone) c.phone = p;
+    if (pk) byPhone[pk] = k;
+    return c;
+  };
+  D.customers.forEach(c => { const x = C(c.email, c.phone, c.name); if (x) x.signup = c.first; });
+  orders.slice().reverse().forEach(o => { const c = C(o.email, o.phone, o.name); if (!c) return; c.name = o.name || c.name;
+    if (o.status === 'Cancelled') return; c.orders.push(o); c.spend += o.total;
+    c.first = c.first ? Math.min(c.first, o.date) : o.date; c.last = c.last ? Math.max(c.last, o.date) : o.date; });
+  const customers = Object.values(cust).map(c => {
+    const n = c.orders.length, since = c.last ? (Date.now() - c.last) / DAY : null;
+    const seg = !n ? 'noorder' : since > 45 ? 'lapsed' : n >= 2 ? 'repeat' : 'new';
+    return { ...c, n, seg, since };
+  }).sort((a, b) => (b.last || b.signup || 0) - (a.last || a.signup || 0));
+  const custEmails = new Set(customers.filter(c => c.n).map(c => c.email));
+  const leads = D.visitors.filter(v => !v.ordered && isEmail(v.email) && !custEmails.has(v.email));
+
+  X = { orders, stock, customers, leads, rateBy, costKg,
+        pending: orders.filter(o => o.status === 'Pending'),
+        unpaid: orders.filter(o => ACTIVE(o.status) && o.payment !== 'Paid') };
+}
+
+function periodRange(p){
+  const now = new Date();
+  if (p === '7') return [Date.now() - 7 * DAY, Infinity];
+  if (p === '30') return [Date.now() - 30 * DAY, Infinity];
+  if (p === 'month') return [new Date(now.getFullYear(), now.getMonth(), 1).getTime(), Infinity];
+  if (p === 'last') return [new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime(), new Date(now.getFullYear(), now.getMonth(), 1).getTime()];
+  return [0, Infinity];
+}
+function stats(p){
+  const [a, b] = periodRange(p), inP = t => t >= a && t < b;
+  const sold = X.orders.filter(o => ACTIVE(o.status) && inP(o.date));
+  const placed = X.orders.filter(o => o.status !== 'Cancelled' && inP(o.date));
+  const revenue = sold.reduce((s, o) => s + o.total, 0);
+  let cogs = 0, cogsKnown = true;
+  sold.forEach(o => o.lines.forEach(l => { const c = X.costKg[l.item.toLowerCase()]; if (c) cogs += c * l.grams / 1000; else cogsKnown = false; }));
+  const expenses = D.expenses.filter(e => inP(e.date)).reduce((s, e) => s + e.amount, 0);
+  const newCust = X.customers.filter(c => c.first && inP(c.first)).length;
+  const buyers = new Set(placed.map(o => o.email || o.phone)).size;
+  const repeatBuyers = X.customers.filter(c => c.n >= 2 && c.orders.some(o => inP(o.date))).length;
+  const items = {};
+  sold.forEach(o => o.lines.forEach(l => { const it = items[l.item] || (items[l.item] = { item:l.item, amount:0, grams:0 }); it.amount += l.amount; it.grams += l.grams; }));
+  const purchases = D.ledger.filter(l => l.grams > 0 && l.cost && inP(l.date)).reduce((s, l) => s + l.cost, 0);
+  return { a, b, sold, placed, revenue, cogs, cogsKnown, expenses, purchases, newCust, buyers, repeatBuyers,
+           aov: sold.length ? revenue / sold.length : 0, top: Object.values(items).sort((x, y) => y.amount - x.amount) };
+}
+
+/* =================== navigation =================== */
+function go(v){ UI.view = v; $('more').classList.remove('on'); closeDrawer(); render(); renderNav(); window.scrollTo(0, 0); }
+function renderNav(){
+  const pend = X.pending ? X.pending.length : 0;
+  $('nav').innerHTML = VIEWS.map(([k, n]) => `<button class="${UI.view === k ? 'on' : ''}" onclick="go('${k}')" ${UI.view === k ? 'aria-current="page"' : ''}>${svg(k)}${n}${k === 'orders' && pend ? `<span class="ct">${pend}</span>` : ''}</button>`).join('');
+  const main = ['overview','orders','stock','customers'];
+  $('tabs').innerHTML = main.map(k => `<button class="${UI.view === k ? 'on' : ''}" onclick="go('${k}')">${svg(k)}${VIEWS.find(v => v[0] === k)[1]}${k === 'orders' && pend ? `<span class="ct">${pend}</span>` : ''}</button>`).join('')
+    + `<button class="${['products','email','money'].includes(UI.view) ? 'on' : ''}" onclick="$('more').classList.toggle('on')">${svg('more')}More</button>`;
+  $('more').innerHTML = ['products','email','money'].map(k => `<button onclick="go('${k}')">${svg(k)}${VIEWS.find(v => v[0] === k)[1]}</button>`).join('');
+}
+function render(){
+  if (!D) return;
+  $('title').textContent = VIEWS.find(v => v[0] === UI.view)[1];
+  ({ overview:vOverview, orders:vOrders, stock:vStock, products:vProducts, customers:vCustomers, email:vEmail, money:vMoney })[UI.view]();
+}
+
+/* =================== overview =================== */
+function vOverview(){
+  const s = stats(UI.period);
+  const label = { '7':'in the last 7 days', '30':'in the last 30 days', month:'this month', all:'so far' }[UI.period];
+  const low = X.stock.filter(x => x.selling && (x.level === 'low' || x.level === 'out'));
+  const unpaidAmt = X.unpaid.reduce((a, o) => a + o.total, 0);
+  const lapsed = X.customers.filter(c => c.seg === 'lapsed' && c.email);
+  const profit = s.revenue - s.cogs - s.expenses;
+
+  const todo = [];
+  if (X.pending.length) todo.push({ ic:'🧾', bg:'var(--pend-b)', t:`${X.pending.length} order${X.pending.length > 1 ? 's' : ''} to confirm`,
+    s:`${rs(X.pending.reduce((a, o) => a + o.total, 0))} waiting. Oldest from ${ago(X.pending[X.pending.length - 1].date)}`, f:"UI.ost='Pending';go('orders')" });
+  if (X.unpaid.length) todo.push({ ic:'💳', bg:'var(--red-b)', t:`${rs(unpaidAmt)} to collect`, s:`${X.unpaid.length} confirmed order${X.unpaid.length > 1 ? 's' : ''} not marked paid`, f:"go('money')" });
+  if (low.length > 2) {
+    const outs = low.filter(x => x.level === 'out');
+    todo.push({ ic:'📦', bg:'var(--pend-b)', t:`${low.length} products low or out of stock`, s:low.map(x => x.item + (x.level === 'out' ? ' (out)' : '')).join(', '), f:"go('stock')" });
+  } else low.forEach(x => todo.push({ ic:'📦', bg:'var(--pend-b)', t:`${x.item} is ${x.level === 'out' ? 'out of stock' : 'running low'}`,
+    s:x.level === 'out' ? 'Still showing in the shop. Add stock or hide it.' : `${fg(x.avail)} left after pending orders`, f:`stockForm('${esc(x.item)}')` }));
+  const untracked = X.stock.filter(x => x.selling && !x.tracked);
+  if (untracked.length) todo.push({ ic:'⚖️', bg:'var(--conf-b)', t:`Add opening stock for ${untracked.length} product${untracked.length > 1 ? 's' : ''}`, s:untracked.map(x => x.item).slice(0, 4).join(', '), f:"go('stock')" });
+  if (lapsed.length) todo.push({ ic:'💌', bg:'var(--conf-b)', t:`${lapsed.length} customer${lapsed.length > 1 ? 's' : ''} haven't ordered in 45+ days`, s:'Send them a note', f:"startMail('winback','lapsed')" });
+  if (X.leads.length) todo.push({ ic:'👀', bg:'var(--gold-l)', t:`${X.leads.length} visitor${X.leads.length > 1 ? 's' : ''} left an email but didn't order`, s:'Invite them with today\'s prices', f:"startMail('prices','leads')" });
+
+  const v = D.visitors, signed = v.filter(x => x.email || x.phone).length, ordered = v.filter(x => x.ordered).length;
+  const fun = [['Visited the shop', v.length], ['Shared contact', signed], ['Placed an order', ordered]];
+
+  $('view').innerHTML = `
+  <div class="toolbar"><div class="seg" role="group" aria-label="Period">${[['7','7 days'],['30','30 days'],['month','This month'],['all','All time']].map(([k, n]) =>
+    `<button class="${UI.period === k ? 'on' : ''}" onclick="UI.period='${k}';render()">${n}</button>`).join('')}</div><span class="sp"></span>
+    <button class="btn p" onclick="orderForm()">New order</button></div>
+  <section class="panel">
+    <div class="hero"><p class="lead">${rs(s.revenue)} in sales from ${s.sold.length} order${s.sold.length === 1 ? '' : 's'}</p>
+      <p class="sub">Confirmed and delivered orders ${label}.${s.placed.length > s.sold.length ? ` ${s.placed.length - s.sold.length} more still pending.` : ''}</p></div>
+    <div class="ledger">
+      <div><b>${rs(s.aov)}</b><span>Average order</span></div>
+      <div><b>${s.cogs ? rs(profit) : '–'}</b><span>${s.cogs ? 'Profit after stock cost and expenses' + (s.cogsKnown ? '' : ' (some costs missing)') : 'Profit: add stock costs to see it'}</span></div>
+      <div class="${unpaidAmt ? 'warn' : ''}"><b>${rs(unpaidAmt)}</b><span>To collect</span></div>
+      <div><b>${s.newCust}</b><span>New customers</span></div>
+      <div><b>${s.buyers ? Math.round(s.repeatBuyers / s.buyers * 100) : 0}%</b><span>Bought more than once</span></div>
+    </div>
+  </section>
+  <div class="grid2">
+    <section class="panel"><div class="panel-h"><h2>Needs attention</h2></div><div class="panel-b"><div class="todo">
+      ${todo.length ? todo.map(t => `<button onclick="${t.f}"><span class="ic" style="background:${t.bg}">${t.ic}</span><span class="tx"><b>${esc(t.t)}</b><small>${esc(t.s)}</small></span><span class="go">›</span></button>`).join('') : '<div class="empty">Nothing waiting. Every order is confirmed and paid.</div>'}
+    </div></div></section>
+    <section class="panel"><div class="panel-h"><h2>Sales by day</h2></div><div class="panel-b" id="ch-sales"></div></section>
+  </div>
+  <div class="grid2 even">
+    <section class="panel"><div class="panel-h"><h2>Best sellers</h2><span class="sp"></span><small style="color:var(--tx3)">${label}</small></div><div class="panel-b">
+      ${s.top.length ? `<table class="tbl"><thead><tr><th>Product</th><th class="r">Sold</th><th class="r">Sales</th><th style="width:30%"></th></tr></thead><tbody>
+      ${s.top.slice(0, 7).map(t => `<tr><td>${esc(t.item)}</td><td class="r">${fg(t.grams)}</td><td class="r">${rs(t.amount)}</td><td><div class="bar"><i style="width:${Math.round(t.amount / s.top[0].amount * 100)}%;background:var(--gold)"></i></div></td></tr>`).join('')}
+      </tbody></table>` : '<div class="empty">No confirmed sales in this period yet.</div>'}</div></section>
+    <section class="panel"><div class="panel-h"><h2>From visit to order</h2><span class="sp"></span><small style="color:var(--tx3)">All time</small></div><div class="panel-b funnel">
+      ${fun.map(([n, c]) => `<div><span>${n}</span><span class="b"><i style="width:${v.length ? Math.max(3, c / v.length * 100) : 0}%"></i></span><b>${c}</b></div>`).join('')}
+      <p class="hint">${v.length ? `${Math.round(ordered / v.length * 100)}% of visitors placed an order.` : 'Visitor tracking starts when people open the shop.'}</p>
+    </div></section>
+  </div>`;
+  drawSales(s);
+}
+function drawSales(s){
+  const el = $('ch-sales'); if (!el) return;
+  const start = s.a > 0 ? s.a : (X.orders.length ? X.orders[X.orders.length - 1].date : Date.now() - 30 * DAY);
+  const days = Math.min(90, Math.max(7, Math.ceil((Date.now() - start) / DAY)));
+  const keys = [], vals = [];
+  for (let i = days - 1; i >= 0; i--) { keys.push(toISO(new Date(Date.now() - i * DAY))); vals.push(0); }
+  s.sold.forEach(o => { const i = keys.indexOf(toISO(new Date(o.date))); if (i >= 0) vals[i] += o.total; });
+  const max = Math.max(...vals);
+  if (!max) { el.innerHTML = '<div class="empty">No confirmed sales in this period yet.</div>'; return; }
+  const nice = (() => { const m = Math.pow(10, Math.floor(Math.log10(max))); return Math.ceil(max / m) * m; })();
+  const W = 600, H = 230, L = 44, B = 24, T = 8, bw = (W - L) / days;
+  const y = v => T + (H - T - B) * (1 - v / nice);
+  const grid = [0, .5, 1].map(f => `<line x1="${L}" x2="${W}" y1="${y(nice * f)}" y2="${y(nice * f)}" stroke="#EEE9F1"/><text x="${L - 6}" y="${y(nice * f) + 4}" text-anchor="end" font-size="11" fill="#8A8092">${nice * f >= 1000 ? '₹' + (nice * f / 1000) + 'k' : '₹' + nice * f}</text>`).join('');
+  const step = Math.ceil(days / 7);
+  const bars = vals.map((v, i) => `<rect x="${L + i * bw + bw * .15}" y="${y(v)}" width="${Math.max(1, bw * .7)}" height="${Math.max(0, H - B - y(v))}" rx="2" fill="${v ? '#C9973F' : 'transparent'}"><title>${dt(new Date(keys[i]).getTime())}: ${rs(v)}</title></rect>`
+    + (i % step === 0 ? `<text x="${L + i * bw + bw / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#8A8092">${dt(new Date(keys[i]).getTime())}</text>` : '')).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Sales by day, highest ${rs(max)}">${grid}${bars}</svg>
+    <p class="hint">Best day: ${rs(max)} on ${dt(new Date(keys[vals.indexOf(max)]).getTime())}. Hover a bar for its total.</p>`;
+}
+
+/* =================== orders =================== */
+function vOrders(){
+  const counts = {}; X.orders.forEach(o => counts[o.status] = (counts[o.status] || 0) + 1);
+  const q = UI.oq.toLowerCase();
+  const list = X.orders.filter(o => (UI.ost === 'All' || o.status === UI.ost) &&
+    (!q || [o.id, o.name, o.phone, o.email, o.items].join(' ').toLowerCase().includes(q)));
+  $('view').innerHTML = `
+  <div class="toolbar"><div class="chips">${['Pending','Confirmed','Packed','Delivered','Cancelled','All'].map(s =>
+    `<button class="chip ${UI.ost === s ? 'on' : ''}" onclick="UI.ost='${s}';render()">${s}<i>${s === 'All' ? X.orders.length : (counts[s] || 0)}</i></button>`).join('')}</div>
+    <span class="sp"></span><input class="search" placeholder="Search name, phone, order ID" value="${esc(UI.oq)}" oninput="UI.oq=this.value;clearTimeout(window._oq);window._oq=setTimeout(()=>{render();const s=document.querySelector('.search');s.focus();s.setSelectionRange(s.value.length,s.value.length)},250)" aria-label="Search orders">
+    <button class="btn p" onclick="orderForm()">New order</button></div>
+  <section class="panel"><div class="scroll">${list.length ? `<table class="tbl cards"><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th class="r">Total</th><th>Status</th><th>Payment</th></tr></thead><tbody>
+    ${list.map(o => `<tr class="click" onclick="orderDetail('${esc(o.id)}')" tabindex="0" onkeydown="if(event.key==='Enter')orderDetail('${esc(o.id)}')">
+      <td><b>${esc(o.id)}</b><br><small>${dt(o.date)}, ${new Date(o.date).toLocaleTimeString('en-IN', { hour:'numeric', minute:'2-digit' })}</small></td>
+      <td>${esc(o.name)}<br><small>${esc(o.phone)}</small></td>
+      <td class="hide-m"><small>${esc(o.items)}</small></td>
+      <td class="r"><b>${rs(o.total)}</b><br><small>${fg(o.qty)}</small></td>
+      <td><span class="pill st-${esc(o.status)}">${esc(o.status)}</span></td>
+      <td>${ACTIVE(o.status) ? `<span class="pill pay-${o.payment === 'Paid' ? 'Paid' : 'Unpaid'}">${o.payment === 'Paid' ? 'Paid' : 'Unpaid'}</span>` : ''}</td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty">${q ? 'No orders match that search.' : `No ${UI.ost.toLowerCase()} orders.`}</div>`}</div></section>`;
+}
+
+function orderDetail(id){
+  const o = X.orders.find(x => x.id === id); if (!o) return;
+  const sub = o.lines.reduce((a, l) => a + l.amount, 0);
+  const first = (o.name || '').split(' ')[0];
+  openDrawer(esc(o.id), `<span class="pill st-${esc(o.status)}">${esc(o.status)}</span>`, `
+    <div class="sec"><h4>Customer</h4><div class="kv"><span>Name</span><b>${esc(o.name)}</b><span>Phone</span><span style="color:var(--tx)">${esc(o.phone) || '–'}</span>
+      <span>Email</span><span style="color:var(--tx)">${esc(o.email) || '–'}</span><span>Address</span><span style="color:var(--tx)">${esc(o.address) || '–'}</span></div>
+      <div class="contact">${o.phone ? `<a class="btn s" href="tel:${esc(o.phone)}">Call</a><a class="btn s" target="_blank" rel="noopener" href="${waLink(o.phone, `Hi ${first}, this is Azraah about your order ${o.id}.`)}">WhatsApp</a>` : ''}
+      ${o.email ? `<button class="btn s" onclick="startMail('update','one',{email:'${esc(o.email)}',name:'${esc(o.name).replace(/'/g, '&#39;')}',orderId:'${esc(o.id)}'})">Email</button>` : ''}</div></div>
+    <div class="sec"><h4>Items</h4><table class="tbl lines"><tbody>
+      ${o.lines.map(l => `<tr><td>${esc(l.item)}</td><td class="r">${fg(l.grams)}</td><td class="r">${rs(l.amount)}</td></tr>`).join('') || `<tr><td>${esc(o.items)}</td></tr>`}
+      <tr><td>Items subtotal</td><td></td><td class="r">${rs(sub)}</td></tr>
+      <tr><td>Handling</td><td></td><td class="r">${o.fee ? rs(o.fee) : 'Free'}</td></tr>
+      ${o.disc ? `<tr><td>Discount<br><small>${esc(o.offers)}</small></td><td></td><td class="r">−${rs(o.disc)}</td></tr>` : ''}
+      <tr class="t"><td>Total</td><td></td><td class="r">${rs(o.total)}</td></tr></tbody></table>
+      ${o.notes ? `<p class="hint" style="font-size:13px"><b>Note:</b> ${esc(o.notes)}</p>` : ''}</div>
+    <div class="sec"><h4>Status</h4><div class="statusbar">
+      ${o.status === 'Pending' ? `<button class="btn p" onclick="setStatus('${esc(o.id)}','Confirmed',this)">Confirm and send invoice</button>` : ''}
+      ${o.status === 'Confirmed' ? `<button class="btn p" onclick="setStatus('${esc(o.id)}','Packed',this)">Mark packed</button>` : ''}
+${o.status === 'Packed' ? `<button class="btn p" onclick="setStatus('${esc(o.id)}','Delivered',this)">Mark delivered</button>` : ''}
+      ${o.status !== 'Cancelled' && o.status !== 'Delivered' ? `<button class="btn d" onclick="if(confirm('Cancel order ${esc(o.id)}?'))setStatus('${esc(o.id)}','Cancelled',this)">Cancel order</button>` : ''}
+      ${o.status === 'Cancelled' ? `<button class="btn" onclick="setStatus('${esc(o.id)}','Pending',this)">Restore to pending</button>` : ''}
+    </div>
+    <label class="check"><input type="checkbox" id="notify" ${o.email ? 'checked' : 'disabled'}> Email ${esc(first) || 'the customer'} if I cancel it (packed and delivered emails go out automatically)</label>
+    <p class="hint">Confirming builds the PDF invoice with the UPI QR and emails it, the same as setting Status to Confirmed in the sheet.</p></div>
+    ${ACTIVE(o.status) ? `<div class="sec"><h4>Payment</h4>
+      <div class="kv"><span>Status</span><span><span class="pill pay-${o.payment === 'Paid' ? 'Paid' : 'Unpaid'}">${o.payment === 'Paid' ? 'Paid ' + dt(o.paidOn) : 'Not paid yet'}</span></span>
+      ${o.confirmedOn ? `<span>Confirmed</span><span style="color:var(--tx)">${dtY(o.confirmedOn)}</span>` : ''}
+      ${o.pdf ? `<span>Invoice</span><a href="${esc(o.pdf)}" target="_blank" rel="noopener">Open PDF</a>` : ''}</div>
+      <div class="contact">${o.payment === 'Paid' ? `<button class="btn s" onclick="setPaid('${esc(o.id)}',false,this)">Mark unpaid</button>`
+        : `<button class="btn s g" onclick="setPaid('${esc(o.id)}',true,this)">Mark paid</button>
+           ${o.phone ? `<a class="btn s" target="_blank" rel="noopener" href="${waLink(o.phone, `Hi ${first}, a gentle reminder for Azraah order ${o.id}: ${rs(o.total)} to UPI ${D.config.upiId}. Thank you!`)}">Send WhatsApp reminder</a>` : ''}`}
+        ${o.email ? `<button class="btn s" onclick="resend('${esc(o.id)}',this)">Re-send invoice</button>` : ''}</div>
+      <label class="check"><input type="checkbox" id="paynotify" ${o.email ? '' : 'disabled'}> Email a payment receipt when I mark it paid</label></div>` : ''}
+  `, '');
+}
+async function setStatus(id, status, btn){
+  const notify = $('notify') ? $('notify').checked : false;
+  await act('status', { id, status, notify }, r => r.invoiced ? `${id} confirmed. Invoice emailed.` : `${id} marked ${status.toLowerCase()}${r.emailed ? ' and customer emailed' : ''}.`, btn);
+  orderDetail(id);
+}
+async function setPaid(id, paid, btn){
+  const notify = $('paynotify') ? $('paynotify').checked : false;
+  await act('pay', { id, paid, notify }, paid ? `${id} marked paid.` : `${id} marked unpaid.`, btn);
+  if (UI.view === 'orders' || $('drawer').classList.contains('on')) orderDetail(id);
+}
+async function resend(id, btn){ await act('resend', { id }, `Invoice for ${id} sent again.`, btn); }
+
+/* new order (WhatsApp / phone / in person) */
+function orderForm(){
+  const items = D.rates.filter(r => r.p250 > 0);
+  const known = X.customers.filter(c => c.name);
+  openDrawer('New order', '', `
+    <p class="hint" style="margin-top:12px">For orders that come by WhatsApp, phone or in person. Prices come from your Rates tab, the same as the website.</p>
+    <label class="f" for="no-name">Customer name</label><input class="in" id="no-name" list="no-known" oninput="fillCust(this.value)" autocomplete="off">
+    <datalist id="no-known">${known.map(c => `<option value="${esc(c.name)}">`).join('')}</datalist>
+    <div class="row2"><div><label class="f" for="no-phone">Mobile</label><input class="in" id="no-phone" inputmode="numeric"></div>
+      <div><label class="f" for="no-email">Email</label><input class="in" id="no-email" type="email"></div></div>
+    <label class="f" for="no-addr">Address</label><input class="in" id="no-addr">
+    <label class="f">Items</label><div id="no-items"></div>
+    <button class="btn s" onclick="addItemRow()">Add another item</button>
+    <div class="row3"><div><label class="f" for="no-fee">Handling (₹)</label><input class="in" id="no-fee" type="number" min="0" value="0" oninput="orderSum()"></div>
+      <div><label class="f" for="no-disc">Discount (₹)</label><input class="in" id="no-disc" type="number" min="0" value="0" oninput="orderSum()"></div>
+      <div><label class="f" for="no-src">Came by</label><select class="in" id="no-src"><option>WhatsApp</option><option>Phone</option><option>In person</option><option>Other</option></select></div></div>
+    <div class="sum" id="no-sum"></div>
+    <label class="f" for="no-notes">Note</label><input class="in" id="no-notes">
+    <label class="f" for="no-status">Save as</label><select class="in" id="no-status"><option value="Pending">Pending (confirm later)</option><option value="Confirmed">Confirmed (emails the invoice if there's an email)</option></select>
+    <label class="check"><input type="checkbox" id="no-rcpt" checked> Email an "order received" note if pending</label>`,
+    `<button class="btn p" onclick="saveOrder(this)">Save order</button><button class="btn" onclick="closeDrawer()">Cancel</button>`);
+  window._items = items; addItemRow(); orderSum();
+}
+function addItemRow(){
+  const q = [250,500,750,1000,1500,2000,2500,3000,4000,5000].map(g => `<option value="${g}">${fg(g)}</option>`).join('');
+  const d = document.createElement('div'); d.className = 'itemrow';
+  const used = orderLines ? [...document.querySelectorAll('#no-items .itemrow select:first-child')].map(x => x.value) : [];
+  const next = (window._items.find(r => !used.includes(r.item)) || window._items[0] || {}).item;
+  d.innerHTML = `<select class="in" onchange="orderSum()" aria-label="Item">${window._items.map(r => `<option ${r.item === next ? 'selected' : ''}>${esc(r.item)}</option>`).join('')}</select><select class="in" onchange="orderSum()" aria-label="Quantity">${q}</select><button class="x" onclick="this.parentNode.remove();orderSum()" aria-label="Remove item">&times;</button>`;
+  $('no-items').appendChild(d); orderSum();
+}
+function orderLines(){ return [...document.querySelectorAll('#no-items .itemrow')].map(r => { const s = r.querySelectorAll('select'); return { item:s[0].value, grams:Number(s[1].value) }; }); }
+function orderSum(){
+  if (!$('no-sum')) return;
+  let sub = 0; orderLines().forEach(l => { const r = X.rateBy[l.item.toLowerCase()]; if (r) sub += priceFor(r, l.grams); });
+  const fee = Number($('no-fee').value) || 0, disc = Number($('no-disc').value) || 0;
+  $('no-sum').innerHTML = `<div><span>Items</span><span>${rs(sub)}</span></div><div><span>Handling</span><span>${rs(fee)}</span></div>${disc ? `<div><span>Discount</span><span>−${rs(disc)}</span></div>` : ''}<div class="t"><span>Total</span><span>${rs(sub + fee - Math.min(disc, sub))}</span></div>`;
+}
+function fillCust(name){
+  const c = X.customers.find(x => x.name.toLowerCase() === String(name).toLowerCase()); if (!c) return;
+  if (!$('no-phone').value) $('no-phone').value = c.phone || '';
+  if (!$('no-email').value) $('no-email').value = c.email || '';
+  const lastAddr = c.orders.length ? c.orders[c.orders.length - 1].address : '';
+  if (!$('no-addr').value) $('no-addr').value = lastAddr || '';
+}
+async function saveOrder(btn){
+  const p = { name:$('no-name').value, phone:$('no-phone').value, email:$('no-email').value, address:$('no-addr').value,
+    items:orderLines(), fee:$('no-fee').value, discount:$('no-disc').value, source:$('no-src').value, notes:$('no-notes').value,
+    status:$('no-status').value, sendReceipt:$('no-rcpt').checked };
+  if (!p.name.trim()) return toast('Add the customer name.', true);
+  const r = await act('order', p, r => `${r.orderId} saved for ${rs(r.total)}${r.invoiced ? '. Invoice emailed.' : r.emailed ? '. Customer emailed.' : '.'}`, btn);
+  if (r) { UI.ost = p.status; go('orders'); }
+}
+
+/* =================== stock =================== */
+function vStock(){
+  const tracked = X.stock.filter(s => s.tracked);
+  const value = tracked.reduce((a, s) => a + Math.max(0, s.onHand) * (s.costKg || 0) / 1000, 0);
+  const low = X.stock.filter(s => s.level === 'low').length, out = X.stock.filter(s => s.level === 'out').length;
+  const max = Math.max(1, ...X.stock.map(s => s.onHand));
+  const led = D.ledger.slice().sort((a, b) => (b.date || 0) - (a.date || 0)).slice(0, 40);
+  $('view').innerHTML = `
+  <div class="toolbar"><div class="chips"><span class="chip"><i>${tracked.length}</i> tracked</span><span class="chip" style="color:var(--pend)"><i>${low}</i> low</span><span class="chip" style="color:var(--red)"><i>${out}</i> out</span>
+    <span class="chip">Stock value at cost <i>${rs(value)}</i></span></div><span class="sp"></span><button class="btn p" onclick="stockForm()">Add stock</button></div>
+  <section class="panel"><div class="scroll"><table class="tbl cards"><thead><tr><th>Product</th><th class="r">In hand</th><th class="r">Booked</th><th class="r">Free to sell</th><th></th><th class="r">Cost / kg</th><th>Status</th><th></th></tr></thead><tbody>
+  ${X.stock.map(s => `<tr>
+    <td><b>${esc(s.item)}</b><br><small>${s.selling ? 'In the shop' : 'Hidden from shop'}${s.reorder ? `, reorder at ${fg(s.reorder)}` : ''}</small></td>
+    <td class="r">${s.tracked ? fg(s.onHand) : '–'}</td>
+    <td class="r hide-m">${s.resG ? fg(s.resG) : '–'}</td>
+    <td class="r hide-m"><b>${s.tracked ? fg(s.avail) : '–'}</b></td>
+    <td class="hide-m">${s.tracked ? `<div class="bar ${s.level}"><i style="width:${Math.max(2, Math.min(100, s.onHand / max * 100))}%"></i></div>` : ''}</td>
+    <td class="r hide-m">${s.costKg ? rs(s.costKg) : '–'}</td>
+    <td><span class="pill lv-${s.level}">${{ ok:'In stock', low:'Low', out:'Out', na:'Not tracked' }[s.level]}</span></td>
+    <td class="r"><button class="btn s" onclick="stockForm('${esc(s.item)}')">Add</button> <button class="btn s" onclick="reorderForm('${esc(s.item)}',${s.reorder})" aria-label="Set reorder level for ${esc(s.item)}">Level</button>
+      ${s.level === 'out' && s.selling ? ` <button class="btn s d" onclick="toggleShop('${esc(s.item)}',false,this)">Hide from shop</button>` : ''}</td></tr>`).join('')}
+  </tbody></table></div>
+  <p class="hint" style="padding:0 18px 16px">In hand = everything you added in the Stock Ledger minus confirmed and delivered orders. Booked = pending orders. Free to sell = in hand minus booked.</p></section>
+  <section class="panel" style="margin-top:18px"><div class="panel-h"><h2>Stock history</h2></div><div class="panel-b scroll">
+  ${led.length ? `<table class="tbl cards"><thead><tr><th>Date</th><th>Product</th><th>Type</th><th class="r">Change</th><th class="r">Cost</th><th>Supplier / note</th><th></th></tr></thead><tbody>
+  ${led.map(l => `<tr><td>${dt(l.date)}</td><td><b>${esc(l.item)}</b></td><td class="hide-m">${esc(l.type)}</td><td class="r" style="color:${l.grams < 0 ? 'var(--red)' : 'var(--deliv)'}">${l.grams > 0 ? '+' : ''}${fg(l.grams)}</td>
+    <td class="r hide-m">${l.cost ? rs(l.cost) : ''}</td><td class="hide-m"><small>${esc([l.supplier, l.note].filter(Boolean).join(', '))}</small></td>
+    <td class="r"><button class="btn s" onclick="if(confirm('Delete this stock entry?'))act('delStock',{id:'${esc(l.id)}'},'Entry deleted.')" aria-label="Delete entry">Delete</button></td></tr>`).join('')}
+  </tbody></table>` : '<div class="empty">No stock entries yet. Add what you have on hand now as a Purchase or Adjustment to start tracking.</div>'}</div></section>`;
+}
+function stockForm(item){
+  const names = [...new Set(D.rates.map(r => r.item).concat(D.ledger.map(l => l.item)))];
+  openDrawer('Add stock', '', `
+    <label class="f" for="sk-item">Product</label><select class="in" id="sk-item">${names.map(n => `<option ${n === item ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>
+    <label class="f" for="sk-type">What happened</label><select class="in" id="sk-type">
+      <option value="Purchase">Bought stock</option><option value="Adjustment">Counted stock (correction, + or −)</option>
+      <option value="Return">Customer return</option><option value="Wastage">Wastage or damage</option><option value="Used / sample">Used as sample or gift</option></select>
+    <div class="row2"><div><label class="f" for="sk-kg">Quantity (kg)</label><input class="in" id="sk-kg" type="number" step="0.25" placeholder="e.g. 5"></div>
+      <div><label class="f" for="sk-cost">Total paid (₹)</label><input class="in" id="sk-cost" type="number" min="0" placeholder="Only for purchases"></div></div>
+    <p class="hint">For a correction, type a negative number to take stock out (e.g. −0.5).</p>
+    <div class="row2"><div><label class="f" for="sk-date">Date</label><input class="in" id="sk-date" type="date" value="${toISO(new Date())}"></div>
+      <div><label class="f" for="sk-sup">Supplier</label><input class="in" id="sk-sup" list="sk-sups"><datalist id="sk-sups">${[...new Set(D.ledger.map(l => l.supplier).filter(Boolean))].map(s => `<option value="${esc(s)}">`).join('')}</datalist></div></div>
+    <label class="f" for="sk-note">Note</label><input class="in" id="sk-note">`,
+    `<button class="btn p" onclick="saveStock(this)">Save stock entry</button><button class="btn" onclick="closeDrawer()">Cancel</button>`);
+}
+async function saveStock(btn){
+  const kg = Number($('sk-kg').value);
+  if (!kg) return toast('Add the quantity in kg.', true);
+  const p = { item:$('sk-item').value, type:$('sk-type').value, grams:Math.round(kg * 1000), cost:$('sk-cost').value, date:$('sk-date').value, supplier:$('sk-sup').value, note:$('sk-note').value };
+  await act('stock', p, `${fg(Math.abs(p.grams))} of ${p.item} recorded.`, btn); closeDrawer();
+}
+function reorderForm(item, cur){
+  openDrawer('Reorder level', '', `<p class="hint" style="margin-top:12px;font-size:13px">You'll see "${esc(item)} is running low" on the Overview when the stock free to sell drops to this level.</p>
+    <label class="f" for="ro-kg">${esc(item)}: warn me at (kg)</label><input class="in" id="ro-kg" type="number" step="0.25" value="${cur ? cur / 1000 : ''}" placeholder="e.g. 1">`,
+    `<button class="btn p" onclick="act('reorder',{item:'${esc(item)}',grams:Math.round(Number($('ro-kg').value)*1000)},'Reorder level saved.').then(closeDrawer)">Save level</button><button class="btn" onclick="closeDrawer()">Cancel</button>`);
+}
+
+/* =================== products (Rates tab) =================== */
+function vProducts(){
+  $('view').innerHTML = `
+  <div class="toolbar"><p class="hint" style="font-size:13px;margin:0">Changes here update the Rates tab, so the shop shows them right away.</p><span class="sp"></span><button class="btn p" onclick="rateForm()">Add product</button></div>
+  <section class="panel"><div class="scroll"><table class="tbl cards"><thead><tr><th>Product</th><th class="r">Market 250 g</th><th class="r">250 g</th><th class="r">500 g</th><th class="r">1 kg</th><th class="r">Margin / kg</th><th>In shop</th><th></th></tr></thead><tbody>
+  ${D.rates.map(r => { const s = X.stock.find(x => x.item.toLowerCase() === r.item.toLowerCase()) || {}; const off = r.mkt250 > r.p250 && r.p250 ? Math.round((1 - r.p250 / r.mkt250) * 100) : 0;
+    const margin = s.costKg && r.p1kg ? r.p1kg - s.costKg : null;
+    return `<tr><td><b>${esc(r.item)}</b>${off ? ` <span class="pill lv-ok">${off}% below market</span>` : ''}<br><small>${r.description ? esc(r.description.slice(0, 60)) + (r.description.length > 60 ? '…' : '') : 'No description'}</small></td>
+    <td class="r hide-m">${r.mkt250 ? rs(r.mkt250) : '–'}</td><td class="r"><b>${r.p250 ? rs(r.p250) : '–'}</b></td><td class="r hide-m">${r.p500 ? rs(r.p500) : '–'}</td><td class="r hide-m">${r.p1kg ? rs(r.p1kg) : '–'}</td>
+    <td class="r hide-m">${margin == null ? '<small>add cost</small>' : `<span style="color:${margin < 0 ? 'var(--red)' : 'var(--deliv)'}">${rs(margin)}</span>`}</td>
+    <td><button class="tog ${r.available ? 'on' : ''}" role="switch" aria-checked="${r.available}" aria-label="Show ${esc(r.item)} in the shop" onclick="toggleShop('${esc(r.item)}',${!r.available},this)"></button></td>
+    <td class="r"><button class="btn s" onclick="rateForm('${esc(r.item)}')">Edit</button></td></tr>`; }).join('')}
+  </tbody></table></div></section>`;
+}
+async function toggleShop(item, on, btn){ await act('rate', { item, origItem:item, available:on }, `${item} is now ${on ? 'showing in' : 'hidden from'} the shop.`, btn); }
+function rateForm(item){
+  const r = D.rates.find(x => x.item === item) || { item:'', mkt250:'', p250:'', p500:'', p1kg:'', available:true, description:'' };
+  openDrawer(item ? 'Edit ' + esc(item) : 'Add product', '', `
+    <label class="f" for="rt-item">Name (as customers see it)</label><input class="in" id="rt-item" value="${esc(r.item)}">
+    <div class="row2"><div><label class="f" for="rt-mkt">Market price 250 g (₹)</label><input class="in" id="rt-mkt" type="number" value="${r.mkt250 || ''}"></div>
+      <div><label class="f" for="rt-250">Your price 250 g (₹)</label><input class="in" id="rt-250" type="number" value="${r.p250 || ''}" oninput="suggestPacks()"></div></div>
+    <div class="row2"><div><label class="f" for="rt-500">500 g (₹)</label><input class="in" id="rt-500" type="number" value="${r.p500 || ''}"></div>
+      <div><label class="f" for="rt-1kg">1 kg (₹)</label><input class="in" id="rt-1kg" type="number" value="${r.p1kg || ''}"></div></div>
+    <p class="hint" id="rt-hint">Bigger packs usually cost a little less per kg.</p>
+    <label class="f" for="rt-desc">Description (shown in the shop's info sheet)</label><textarea class="in" id="rt-desc" style="min-height:110px">${esc(r.description)}</textarea>
+    <label class="check"><input type="checkbox" id="rt-av" ${r.available ? 'checked' : ''}> Show in the shop</label>`,
+    `<button class="btn p" onclick="saveRate('${esc(item || '')}',this)">Save product</button><button class="btn" onclick="closeDrawer()">Cancel</button>`);
+}
+function suggestPacks(){
+  const p = Number($('rt-250').value) || 0;
+  $('rt-hint').textContent = p ? `At 2% and 3.5% less per kg: 500 g ${rs(Math.round(p * 2 * .98 / 5) * 5)}, 1 kg ${rs(Math.round(p * 4 * .965 / 5) * 5)}.` : 'Bigger packs usually cost a little less per kg.';
+}
+async function saveRate(orig, btn){
+  const p = { origItem:orig || undefined, item:$('rt-item').value, mkt250:$('rt-mkt').value, p250:$('rt-250').value, p500:$('rt-500').value, p1kg:$('rt-1kg').value, description:$('rt-desc').value, available:$('rt-av').checked };
+  if (!p.item.trim()) return toast('Add the product name.', true);
+  await act('rate', p, `${p.item} saved. The shop shows the new prices now.`, btn); closeDrawer();
+}
+
+/* =================== customers =================== */
+const SEGS = [['all','Everyone'],['repeat','Repeat'],['new','Ordered once'],['lapsed','Not ordered in 45+ days'],['noorder','Signed up, no order'],['leads','Visitors who didn\'t order']];
+function custList(seg){
+  if (seg === 'leads') return X.leads.map(v => ({ key:v.email, name:v.name, email:v.email, phone:v.phone, n:0, spend:0, last:null, seg:'lead', visits:v.visits, lastVisit:v.last }));
+  return X.customers.filter(c => seg === 'all' || c.seg === seg);
+}
+function vCustomers(){
+  const counts = {}; SEGS.forEach(([k]) => counts[k] = custList(k).length);
+  const q = UI.cq.toLowerCase();
+  const list = custList(UI.cseg).filter(c => !q || [c.name, c.email, c.phone].join(' ').toLowerCase().includes(q));
+  const segName = { repeat:'Repeat', new:'Ordered once', lapsed:'Lapsed', noorder:'No order yet', lead:'Visitor' };
+  $('view').innerHTML = `
+  <div class="toolbar"><div class="chips">${SEGS.map(([k, n]) => `<button class="chip ${UI.cseg === k ? 'on' : ''}" onclick="UI.cseg='${k}';UI.sel.clear();render()">${n}<i>${counts[k]}</i></button>`).join('')}</div></div>
+  <div class="toolbar"><input class="search" placeholder="Search name, phone, email" value="${esc(UI.cq)}" oninput="UI.cq=this.value;clearTimeout(window._cq);window._cq=setTimeout(()=>{render();const s=document.querySelector('.search');s.focus();s.setSelectionRange(s.value.length,s.value.length)},250)" aria-label="Search customers">
+    <span class="sp"></span><button class="btn p" ${UI.sel.size ? '' : 'disabled'} onclick="startMail('',' selected')">Email ${UI.sel.size || ''} selected</button></div>
+  <section class="panel"><div class="scroll">${list.length ? `<table class="tbl cards"><thead><tr><th style="width:36px"><input type="checkbox" aria-label="Select all" onchange="selAll(this.checked)" ${list.every(c => UI.sel.has(c.key)) ? 'checked' : ''}></th><th>Customer</th><th class="r">Orders</th><th class="r">Spent</th><th>Last order</th><th>Group</th></tr></thead><tbody>
+  ${list.map(c => `<tr class="click" onclick="if(event.target.type!=='checkbox')custDetail('${esc(c.key)}')">
+    <td><input type="checkbox" ${UI.sel.has(c.key) ? 'checked' : ''} ${c.email ? '' : 'disabled title="No email"'} aria-label="Select ${esc(c.name)}" onchange="this.checked?UI.sel.add('${esc(c.key)}'):UI.sel.delete('${esc(c.key)}');render()"></td>
+    <td><b>${esc(c.name) || '(no name)'}</b><br><small>${esc(c.phone)}${c.phone && c.email ? ', ' : ''}${esc(c.email)}</small></td>
+    <td class="r">${c.n}</td><td class="r"><b>${c.spend ? rs(c.spend) : '–'}</b></td>
+    <td class="hide-m">${c.last ? ago(c.last) : c.lastVisit ? 'Visited ' + ago(c.lastVisit) : '–'}</td>
+    <td class="hide-m"><span class="pill seg-pill">${segName[c.seg] || ''}</span></td></tr>`).join('')}
+  </tbody></table>` : '<div class="empty">Nobody in this group yet.</div>'}</div></section>`;
+}
+function selAll(on){ custList(UI.cseg).forEach(c => { if (c.email) on ? UI.sel.add(c.key) : UI.sel.delete(c.key); }); render(); }
+function custDetail(key){
+  const c = X.customers.find(x => x.key === key) || custList('leads').find(x => x.key === key); if (!c) return;
+  const fav = {}; (c.orders || []).forEach(o => o.lines.forEach(l => fav[l.item] = (fav[l.item] || 0) + l.grams));
+  const favs = Object.entries(fav).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const first = (c.name || '').split(' ')[0];
+  openDrawer(esc(c.name) || 'Customer', '', `
+    <div class="sec"><div class="kv"><span>Phone</span><span style="color:var(--tx)">${esc(c.phone) || '–'}</span><span>Email</span><span style="color:var(--tx)">${esc(c.email) || '–'}</span>
+      <span>Orders</span><b>${c.n}</b><span>Spent</span><b>${rs(c.spend)}</b>${c.first ? `<span>Customer since</span><span style="color:var(--tx)">${dtY(c.first)}</span>` : ''}
+      ${favs.length ? `<span>Usually buys</span><span style="color:var(--tx)">${favs.map(([i, g]) => `${esc(i)} (${fg(g)})`).join(', ')}</span>` : ''}</div>
+      <div class="contact">${c.phone ? `<a class="btn s" href="tel:${esc(c.phone)}">Call</a><a class="btn s" target="_blank" rel="noopener" href="${waLink(c.phone, `Hi ${first}, this is Azraah.`)}">WhatsApp</a>` : ''}
+      ${c.email ? `<button class="btn s" onclick="startMail('blank','one',{email:'${esc(c.email)}',name:'${esc(c.name).replace(/'/g, '&#39;')}'})">Email</button>` : ''}
+      <button class="btn s" onclick="orderForm();$('no-name').value='${esc(c.name).replace(/'/g, '&#39;')}';fillCust($('no-name').value)">New order</button></div></div>
+    ${c.orders && c.orders.length ? `<div class="sec"><h4>Orders</h4><table class="tbl"><tbody>${c.orders.slice().reverse().map(o => `<tr class="click" onclick="orderDetail('${esc(o.id)}')"><td><b>${esc(o.id)}</b><br><small>${dtY(o.date)}</small></td><td><small>${esc(o.items)}</small></td><td class="r">${rs(o.total)}</td><td><span class="pill st-${esc(o.status)}">${esc(o.status)}</span></td></tr>`).join('')}</tbody></table></div>` : ''}`, '');
+}
+
+/* =================== email =================== */
+const TPL = {
+  festive:{ name:'Festival offer', type:'Offer', f:c => ({ subject:'Fresh dry fruits for the festive season', heading:'Celebrate with Azraah',
+    body:`Hi {first},\n\nThe festive season is here, and we've stocked fresh kaju, badam, pista and more for your family and guests.\n\n${offerLine(c)}\n\nOrder on our website and we'll confirm by email with your invoice.`, prices:true, button:true }) },
+  prices:{ name:"Today's prices", type:'Offer', f:c => ({ subject:"This week's dry fruit prices at Azraah", heading:"This week's prices",
+    body:`Hi {first},\n\nHere are this week's prices at Azraah. ${c.best ? `${c.best.item} is ${c.best.off}% below market price right now.` : ''}\n\n${offerLine(c)}`, prices:true, button:true }) },
+  back:{ name:'Back in stock', type:'Update', item:true, f:c => ({ subject:`${c.item || 'Your favourite'} is back in stock`, heading:`${c.item || 'Your favourite'} is back`,
+    body:`Hi {first},\n\nGood news: ${c.item || 'it'} is back in stock at Azraah, weighed fresh in 250 g, 500 g and 1 kg packs.\n\nStock is limited, so order soon if you'd like some.`, prices:true, priceItems:c.item ? [c.item] : [], button:true }) },
+  thanks:{ name:'Thank you and feedback', type:'Thank you', f:c => ({ subject:'Thank you for ordering from Azraah', heading:'Thank you, {first}',
+    body:`Hi {first},\n\nThank you for ordering from Azraah. We hope you're enjoying it.\n\nWe'd love to hear what you thought. Just reply to this email with a line or two.${c.cfg.offers.returnOff ? `\n\nOrder again within ${c.cfg.offers.returnDays} days of your last order and ₹${c.cfg.offers.returnOff} comes off automatically.` : ''}`, prices:false, button:true }) },
+  winback:{ name:"It's been a while", type:'Win-back', f:c => ({ subject:'Fresh stock at Azraah', heading:"It's been a while, {first}",
+    body:`Hi {first},\n\nIt's been a while since your last order, and our stock has been refreshed since then.\n\nHere's what we have this week. If there's something you'd like that isn't listed, reply and we'll try to get it for you.`, prices:true, button:true }) },
+  update:{ name:'Order update', type:'Order update', f:c => ({ subject:c.orderId ? `An update on your order ${c.orderId}` : 'An update on your order', heading:'An update on your order',
+    body:`Hi {first},\n\n`, prices:false, button:false }) },
+  blank:{ name:'Blank', type:'Note', f:() => ({ subject:'', heading:'', body:'Hi {first},\n\n', prices:false, button:false }) }
+};
+function offerLine(c){
+  const o = c.cfg.offers, parts = [];
+  if (o.freeHandlingFrom) parts.push(`orders above ₹${o.freeHandlingFrom.toLocaleString('en-IN')} get free handling`);
+  if (o.bigOrderOff) parts.push(`orders above ₹${o.bigOrderFrom.toLocaleString('en-IN')} get ₹${o.bigOrderOff} off`);
+  return parts.length ? parts.join(', and ').replace(/^./, s => s.toUpperCase()) + '.' : '';
+}
+const AUD = [['selected','Selected customers'],['all','All customers'],['repeat','Repeat customers'],['recent','Ordered in the last 30 days'],['lapsed','Not ordered in 45+ days'],['noorder','Signed up, no order'],['leads','Visitors who didn\'t order'],['one','One person']];
+function audience(a){
+  let l = [];
+  if (a === 'selected') l = X.customers.concat(custList('leads')).filter(c => UI.sel.has(c.key));
+  else if (a === 'all') l = X.customers;
+  else if (a === 'recent') l = X.customers.filter(c => c.since != null && c.since <= 30);
+  else if (a === 'leads') l = custList('leads');
+  else if (a === 'one') l = UI.mail.one ? [UI.mail.one] : [];
+  else l = X.customers.filter(c => c.seg === a);
+  const seen = new Set();
+  return l.filter(c => isEmail(c.email) && !seen.has(c.email) && seen.add(c.email)).map(c => ({ name:c.name, email:c.email }));
+}
+function startMail(tpl, aud, one){
+  aud = (aud || '').trim();
+  UI.mail = { tpl:tpl || (UI.sel.size ? 'prices' : 'festive'), aud:aud || (UI.sel.size ? 'selected' : 'all'), one:one || null, item:'' };
+  if (!tpl && UI.sel.size) UI.mail.aud = 'selected';
+  applyTpl(); go('email');
+}
+function applyTpl(){
+  const m = UI.mail, t = TPL[m.tpl];
+  const best = D.rates.filter(r => r.available && r.mkt250 > r.p250 && r.p250).map(r => ({ item:r.item, off:Math.round((1 - r.p250 / r.mkt250) * 100) })).sort((a, b) => b.off - a.off)[0];
+  Object.assign(m, t.f({ cfg:D.config, best, item:m.item, orderId:m.one && m.one.orderId }), { type:t.type });
+  if (!m.priceItems || !m.priceItems.length) m.priceItems = D.rates.filter(r => r.available && r.p250 > 0).map(r => r.item);
+}
+function vEmail(){
+  if (!UI.mail) { UI.mail = { tpl:'festive', aud:'all', one:null, item:'' }; applyTpl(); }
+  const m = UI.mail, rec = audience(m.aud), quota = D.config.quota;
+  const avail = D.rates.filter(r => r.available && r.p250 > 0);
+  $('view').innerHTML = `
+  <div class="mail">
+    <section class="panel"><div class="panel-b">
+      <label class="f" for="m-tpl" style="margin-top:0">Start from</label>
+      <select class="in" id="m-tpl" onchange="UI.mail.tpl=this.value;applyTpl();render()">${Object.entries(TPL).map(([k, t]) => `<option value="${k}" ${m.tpl === k ? 'selected' : ''}>${t.name}</option>`).join('')}</select>
+      ${TPL[m.tpl].item ? `<label class="f" for="m-item">Which product</label><select class="in" id="m-item" onchange="UI.mail.item=this.value;applyTpl();render()"><option value="">Choose…</option>${avail.map(r => `<option ${m.item === r.item ? 'selected' : ''}>${esc(r.item)}</option>`).join('')}</select>` : ''}
+      <label class="f" for="m-aud">Send to</label>
+      <select class="in" id="m-aud" onchange="UI.mail.aud=this.value;render()">${AUD.map(([k, n]) => `<option value="${k}" ${m.aud === k ? 'selected' : ''}>${n} (${k === 'one' ? (m.one ? 1 : 0) : audience(k).length})</option>`).join('')}</select>
+      ${m.aud === 'one' ? `<div class="row2" style="margin-top:8px"><input class="in" placeholder="Name" value="${esc(m.one ? m.one.name : '')}" oninput="UI.mail.one=Object.assign(UI.mail.one||{},{name:this.value})" aria-label="Recipient name">
+        <input class="in" placeholder="Email" type="email" value="${esc(m.one ? m.one.email : '')}" onchange="UI.mail.one=Object.assign(UI.mail.one||{},{email:this.value.trim()});render()" aria-label="Recipient email"></div>` : ''}
+      <div class="reclist">${rec.length ? rec.map(r => `${esc(r.name || '')} &lt;${esc(r.email)}&gt;`).join('<br>') : 'Nobody with an email address in this group.'}</div>
+      <label class="f" for="m-sub">Subject</label><input class="in" id="m-sub" value="${esc(m.subject)}" oninput="UI.mail.subject=this.value;prevSoon()">
+      <label class="f" for="m-head">Heading inside the email</label><input class="in" id="m-head" value="${esc(m.heading)}" oninput="UI.mail.heading=this.value;prevSoon()">
+      <label class="f" for="m-body">Message</label><textarea class="in" id="m-body" oninput="UI.mail.body=this.value;prevSoon()">${esc(m.body)}</textarea>
+      <div class="merge"><span class="hint" style="margin:0 4px 0 0">Insert:</span><button onclick="ins('{first}')">first name</button><button onclick="ins('{name}')">full name</button></div>
+      <label class="check"><input type="checkbox" ${m.prices ? 'checked' : ''} onchange="UI.mail.prices=this.checked;render()"> Include a price table</label>
+      ${m.prices ? `<div class="picks">${avail.map(r => `<label><input type="checkbox" ${m.priceItems.includes(r.item) ? 'checked' : ''} onchange="togPick('${esc(r.item)}',this.checked)">${esc(r.item)}</label>`).join('')}</div>` : ''}
+      <label class="check"><input type="checkbox" ${m.button ? 'checked' : ''} onchange="UI.mail.button=this.checked;prevSoon()"> Add an "Order on our website" button</label>
+      <div class="toolbar" style="margin:18px 0 0"><button class="btn p" ${rec.length ? '' : 'disabled'} onclick="sendMail('send',this)">Send to ${rec.length}</button>
+        <button class="btn" ${rec.length ? '' : 'disabled'} onclick="sendMail('draft',this)">Save as Gmail drafts</button></div>
+      <p class="hint">Gmail lets this account send about ${quota} more emails today. Drafts don't count until you send them from Gmail.</p>
+    </div></section>
+    <section class="panel"><div class="panel-h"><h2>Preview</h2><span class="sp"></span><small style="color:var(--tx3)">as Medha Kulkarni sees it</small></div><div class="panel-b"><iframe class="preview" id="m-prev" title="Email preview"></iframe></div></section>
+  </div>
+  <section class="panel" style="margin-top:18px"><div class="panel-h"><h2>Sent emails</h2></div><div class="panel-b scroll">
+  ${D.emails.length ? `<table class="tbl cards"><thead><tr><th>When</th><th>To</th><th>Subject</th><th>Type</th><th>Status</th></tr></thead><tbody>
+  ${D.emails.slice().reverse().slice(0, 50).map(e => `<tr><td>${dt(e.at)}</td><td>${esc(e.name || e.to)}<br><small>${esc(e.to)}</small></td><td class="hide-m">${esc(e.subject)}</td><td class="hide-m">${esc(e.type)}</td><td><span class="pill ${e.status === 'Sent' ? 'lv-ok' : 'lv-na'}">${esc(e.status)}</span></td></tr>`).join('')}
+  </tbody></table>` : '<div class="empty">Emails you send from here are listed with the date and who got them.</div>'}</div></section>`;
+  preview();
+}
+function togPick(item, on){ const p = UI.mail.priceItems; on ? p.push(item) : p.splice(p.indexOf(item), 1); prevSoon(); }
+function ins(tag){ const t = $('m-body'), a = t.selectionStart, b = t.selectionEnd; t.value = t.value.slice(0, a) + tag + t.value.slice(b); t.focus(); t.selectionStart = t.selectionEnd = a + tag.length; UI.mail.body = t.value; prevSoon(); }
+function mailPayload(){ const m = UI.mail; return { subject:m.subject, heading:m.heading, body:m.body, prices:m.prices, priceItems:m.priceItems, button:m.button, type:m.type }; }
+function prevSoon(){ clearTimeout(window._pv); window._pv = setTimeout(preview, 400); }
+async function preview(){
+  const f = $('m-prev'); if (!f) return;
+  try { const r = await call('preview', mailPayload()); f.srcdoc = r.html; } catch (e) { f.srcdoc = '<p style="font-family:sans-serif;padding:20px">' + esc(errMsg(e)) + '</p>'; }
+}
+async function sendMail(mode, btn){
+  const rec = audience(UI.mail.aud);
+  if (!UI.mail.subject.trim()) return toast('Add a subject.', true);
+  if (mode === 'send' && !confirm(`Send "${UI.mail.subject}" to ${rec.length} ${rec.length === 1 ? 'person' : 'people'}?`)) return;
+  const r = await act('email', Object.assign(mailPayload(), { to:rec, mode }), r => mode === 'draft' ? `${r.done} drafts saved in Gmail.` : `Sent to ${r.done} ${r.done === 1 ? 'person' : 'people'}.` + (r.failed.length ? ` ${r.failed.length} failed.` : ''), btn);
+  if (r && r.failed && r.failed.length) alert('These failed:\n' + r.failed.join('\n'));
+  if (r && mode === 'send') UI.sel.clear();
+}
+
+/* =================== money =================== */
+function vMoney(){
+  const s = stats(UI.mper);
+  const inv = X.orders.filter(o => ACTIVE(o.status));
+  const billed = inv.reduce((a, o) => a + o.total, 0), paid = inv.filter(o => o.payment === 'Paid').reduce((a, o) => a + o.total, 0);
+  const exp = D.expenses.slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+  const profit = s.revenue - s.cogs - s.expenses;
+  $('view').innerHTML = `
+  <div class="toolbar"><div class="seg" role="group" aria-label="Period">${[['month','This month'],['last','Last month'],['30','30 days'],['all','All time']].map(([k, n]) =>
+    `<button class="${UI.mper === k ? 'on' : ''}" onclick="UI.mper='${k}';render()">${n}</button>`).join('')}</div></div>
+  <section class="panel"><div class="ledger" style="margin-top:0;border-top:none">
+    <div><b>${rs(s.revenue)}</b><span>Sales (confirmed and delivered)</span></div>
+    <div><b>${s.cogs ? rs(s.cogs) : '–'}</b><span>Cost of what you sold${s.cogsKnown ? '' : ' (some costs missing)'}</span></div>
+    <div><b>${rs(s.expenses)}</b><span>Expenses</span></div>
+    <div><b style="color:${profit < 0 ? 'var(--red)' : 'var(--deliv)'}">${s.cogs ? rs(profit) : '–'}</b><span>Profit</span></div>
+    <div><b>${rs(s.purchases)}</b><span>Spent on stock</span></div>
+  </div></section>
+  <div class="grid2">
+    <section class="panel"><div class="panel-h"><h2>Invoices</h2><span class="sp"></span><small style="color:var(--tx3)">${rs(paid)} of ${rs(billed)} collected</small></div><div class="panel-b scroll">
+    ${inv.length ? `<table class="tbl cards"><thead><tr><th>Invoice</th><th>Customer</th><th class="r">Amount</th><th>Payment</th><th></th></tr></thead><tbody>
+    ${inv.map(o => `<tr><td style="white-space:nowrap"><b>INV-${esc(o.id)}</b><br><small>${dtY(o.confirmedOn || o.date)}</small></td><td>${esc(o.name)}</td><td class="r"><b>${rs(o.total)}</b></td>
+      <td><span class="pill pay-${o.payment === 'Paid' ? 'Paid' : 'Unpaid'}">${o.payment === 'Paid' ? 'Paid' : 'Unpaid'}</span></td>
+      <td class="r">${o.pdf ? `<a class="btn s" href="${esc(o.pdf)}" target="_blank" rel="noopener">PDF</a> ` : ''}${o.payment === 'Paid' ? '' : `<button class="btn s g" onclick="setPaid('${esc(o.id)}',true,this)">Mark paid</button>`}</td></tr>`).join('')}
+    </tbody></table>` : '<div class="empty">Invoices appear here once you confirm orders.</div>'}</div></section>
+    <section class="panel"><div class="panel-h"><h2>Expenses</h2></div><div class="panel-b">
+      <div class="row3"><div><label class="f" for="ex-amt" style="margin-top:0">Amount (₹)</label><input class="in" id="ex-amt" type="number" min="0"></div>
+        <div><label class="f" for="ex-cat" style="margin-top:0">For</label><select class="in" id="ex-cat"><option>Packaging</option><option>Delivery</option><option>Labels and printing</option><option>Marketing</option><option>Travel</option><option>Other</option></select></div>
+        <div><label class="f" for="ex-date" style="margin-top:0">Date</label><input class="in" id="ex-date" type="date" value="${toISO(new Date())}"></div></div>
+      <div class="row2"><div><label class="f" for="ex-to">Paid to</label><input class="in" id="ex-to"></div><div><label class="f" for="ex-note">Note</label><input class="in" id="ex-note"></div></div>
+      <div class="toolbar" style="margin:12px 0 4px"><button class="btn p" onclick="saveExpense(this)">Add expense</button></div>
+      ${exp.length ? `<table class="tbl"><tbody>${exp.slice(0, 30).map(e => `<tr><td>${dt(e.date)}</td><td>${esc(e.category)}<br><small>${esc([e.paidTo, e.note].filter(Boolean).join(', '))}</small></td><td class="r"><b>${rs(e.amount)}</b></td>
+        <td class="r"><button class="btn s" onclick="if(confirm('Delete this expense?'))act('delExpense',{id:'${esc(e.id)}'},'Expense deleted.')">Delete</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Add packaging, delivery and other costs to see your real profit.</div>'}
+    </div></section>
+  </div>`;
+}
+async function saveExpense(btn){
+  const p = { amount:$('ex-amt').value, category:$('ex-cat').value, date:$('ex-date').value, paidTo:$('ex-to').value, note:$('ex-note').value };
+  if (!Number(p.amount)) return toast('Add the amount.', true);
+  await act('expense', p, `${rs(p.amount)} for ${p.category.toLowerCase()} added.`, btn);
+}
+
+/* =================== drawer + toast =================== */
+let lastFocus = null;
+function openDrawer(title, tag, body, foot){
+  lastFocus = document.activeElement;
+  $('dr-title').innerHTML = title; $('dr-tag').innerHTML = tag || ''; $('dr-b').innerHTML = body; $('dr-f').innerHTML = foot || '';
+  $('dr-f').style.display = foot ? '' : 'none';
+  $('drawer').classList.add('on'); $('scrim').classList.add('on'); $('drawer').scrollTop = 0; $('dr-b').scrollTop = 0;
+  setTimeout(() => { const f = $('drawer').querySelector('input:not([type=checkbox]),select,.x'); if (f) f.focus(); }, 60);
+}
+function closeDrawer(){ $('drawer').classList.remove('on'); $('scrim').classList.remove('on'); if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeDrawer(); $('more').classList.remove('on'); } });
+function toast(msg, err){ const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', err ? 5000 : 3200); }
+
+/* =================== sample data (only when opened outside Apps Script) =================== */
+function demoData(){
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const rates = [
+    ['Kaju',300,255,495,985,'Creamy W240 cashews.'],['Badam',290,250,490,970,'California almonds.'],['Pista',330,280,550,1090,'Roasted, lightly salted.'],
+    ['Anjeer',350,280,550,1080,'Soft Afghan figs.'],['Black Manuka',180,150,290,570,'Seedless black raisins.'],['Akrot',350,300,590,1160,'Chile walnut kernels.'],
+    ['Kishmish',160,130,250,490,'Green raisins.'],['Khajur',0,0,0,0,''],['Makhana',0,0,0,0,'']
+  ].map((r, i) => ({ row:i + 2, item:r[0], mkt250:r[1], p250:r[2], p500:r[3], p1kg:r[4], available:r[2] > 0 && r[0] !== 'Kishmish', description:r[5] }));
+  const people = [['Medha Kulkarni','9876543210'],['Rohan Deshmukh','9822011223'],['Ayesha Khan','9890045678'],['Priya Nair','9765012345'],['Sameer Joshi','9921234567'],
+    ['Fatima Shaikh','9850098765'],['Vikram Patil','9011223344'],['Neha Gupta','9767543210'],['Arjun Rao','9823456789'],['Sana Ansari','9960011122'],['Kiran Pawar','9890176543'],['Imran Sayyed','9503344556']]
+    .map(([n, p]) => ({ name:n, phone:p, email:n.toLowerCase().replace(' ', '.') + '@gmail.com' }));
+  const sell = rates.filter(r => r.available);
+  const orders = []; let seq = 1001;
+  for (let i = 0; i < 30; i++) {
+    const daysAgo = Math.floor(Math.pow(rnd(), 1.4) * 55), c = people[Math.floor(Math.pow(rnd(), 1.3) * people.length)];
+    const lines = []; const n = 1 + Math.floor(rnd() * 3);
+    for (let j = 0; j < n; j++) { const r = pick(sell); if (lines.find(l => l.item === r.item)) continue; const g = pick([250,500,500,1000,1000,1500]); lines.push({ item:r.item, grams:g, rate:r.p250, amount:priceFor(r, g) }); }
+    const sub = lines.reduce((a, l) => a + l.amount, 0), fee = sub >= 1700 ? 0 : 30, disc = sub >= 3000 ? 50 : 0;
+    const date = Date.now() - daysAgo * DAY - Math.floor(rnd() * 10) * 36e5;
+    const status = daysAgo < 2 ? (rnd() < .7 ? 'Pending' : 'Confirmed') : daysAgo < 5 ? pick(['Confirmed','Delivered','Pending']) : (rnd() < .04 ? 'Cancelled' : 'Delivered');
+    orders.push({ row:i + 2, id:'AZ-W' + (seq++), date, name:c.name, email:c.email, phone:c.phone, address:pick(['Kothrud, Pune 411038','Baner, Pune 411045','Aundh, Pune 411007','Viman Nagar, Pune 411014','Wakad, Pune 411057']),
+      items:lines.map(l => `${l.item} – ${fg(l.grams)}`).join(', '), qty:lines.reduce((a, l) => a + l.grams, 0), total:sub + fee - disc, notes:rnd() < .2 ? 'Please call before delivery' : '',
+      status, confirmedOn:ACTIVE(status) ? date + 5 * 36e5 : null, pdf:ACTIVE(status) ? 'https://drive.google.com/' : '', fee, disc, offers:disc ? '₹50 off (order ≥ ₹3,000)' : '',
+      payment:status === 'Delivered' && rnd() < .85 ? 'Paid' : '', paidOn:null, payNote:'', lines });
+  }
+  orders.sort((a, b) => a.date - b.date).forEach((o, i) => { o.id = 'AZ-W' + (1001 + i); o.row = i + 2; });
+  const customers = people.slice(0, 11).map(p => ({ ...p, first:Date.now() - 60 * DAY, last:Date.now() - 3 * DAY, orders:0 }));
+  const visitors = [];
+  for (let i = 0; i < 46; i++) { const p = i < people.length ? people[i] : null; visitors.push({ id:'v' + i, name:p ? p.name : '', first:Date.now() - rnd() * 50 * DAY, last:Date.now() - rnd() * 10 * DAY, visits:1 + Math.floor(rnd() * 5),
+    phone:p ? p.phone : '', email:p ? p.email : (i < 22 ? `guest${i}@gmail.com` : ''), ordered:!!p && orders.some(o => o.email === p.email), orders:0, lastOrderId:'', lastOrderAt:null }); }
+  const ledger = [['Kaju',10000,8000,'Pune APMC'],['Badam',10000,7750,'Pune APMC'],['Pista',8000,7600,'Crawford Market'],['Anjeer',7000,6300,'Crawford Market'],['Black Manuka',5000,2250,'Pune APMC'],['Akrot',4000,4000,'Kashmir Traders']]
+    .map(([item, g, cost, sup], i) => ({ id:'s' + i, date:Date.now() - 58 * DAY, item, grams:g, type:'Purchase', cost, supplier:sup, note:'Opening stock' }));
+  ledger.push({ id:'s9', date:Date.now() - 20 * DAY, item:'Kaju', grams:5000, type:'Purchase', cost:4000, supplier:'Pune APMC', note:'' });
+  ledger.push({ id:'s10', date:Date.now() - 12 * DAY, item:'Badam', grams:-250, type:'Wastage', cost:0, supplier:'', note:'Pouch torn' });
+  const expenses = [[1200,'Packaging','Zip pouches, 500 pcs',40],[800,'Labels and printing','Azraah labels',35],[450,'Delivery','Porter',10],[300,'Delivery','Porter',3]]
+    .map(([amount, category, note, d], i) => ({ id:'e' + i, date:Date.now() - d * DAY, amount, category, paidTo:'', note }));
+  return { rates, orders, customers, visitors, ledger, reorder:{ Kaju:1000, Pista:1000, Akrot:3000 }, expenses, emails:[],
+    config:{ shop:'Azraah Dry Fruits', me:'azraahsells@gmail.com', ownerEmail:'azraahsells@gmail.com', ownerPhone:'+91 9766801808', upiId:'', handlingFee:30, minOrder:250,
+      offers:{ freeHandlingFrom:1700, bigOrderFrom:3000, bigOrderOff:50, returnDays:30, returnOff:50 }, shopUrl:'https://azraahsells.github.io/products/', sheetUrl:'https://docs.google.com/spreadsheets/', quota:94, statuses:['Pending','Confirmed','Packed','Delivered','Cancelled'], loadedAt:Date.now() } };
+}
+let DEMO = null;
+function demoApi(action, p){
+  if (!DEMO) DEMO = demoData();
+  const d = DEMO, o = p.id ? d.orders.find(x => x.id === p.id) : null; let extra = {};
+  if (action === 'preview') return { ok:true, html:demoMail(p) };
+  if (action === 'status') { o.status = p.status; if (p.status === 'Confirmed' && !o.confirmedOn) { o.confirmedOn = Date.now(); o.pdf = 'https://drive.google.com/'; extra.invoiced = true; } extra.emailed = /Packed|Delivered/.test(p.status) || (!!p.notify && p.status === 'Cancelled'); }
+  if (action === 'pay') { o.payment = p.paid ? 'Paid' : 'Unpaid'; o.paidOn = p.paid ? Date.now() : null; }
+  if (action === 'rate') { let r = d.rates.find(x => x.item === (p.origItem || p.item)); if (!r) { r = { item:p.item }; d.rates.push(r); }
+    ['item','description'].forEach(k => p[k] !== undefined && (r[k] = p[k])); ['mkt250','p250','p500','p1kg'].forEach(k => p[k] !== undefined && (r[k] = Number(p[k]) || 0)); if (p.available !== undefined) r.available = p.available; }
+  if (action === 'stock') { const out = /wastage|used/i.test(p.type); d.ledger.push({ id:'s' + Date.now(), date:p.date ? new Date(p.date).getTime() : Date.now(), item:p.item, grams:out ? -Math.abs(p.grams) : (/adjust/i.test(p.type) ? p.grams : Math.abs(p.grams)), type:p.type, cost:Number(p.cost) || 0, supplier:p.supplier, note:p.note }); }
+  if (action === 'delStock') d.ledger = d.ledger.filter(l => l.id !== p.id);
+  if (action === 'reorder') d.reorder[p.item] = p.grams;
+  if (action === 'expense') d.expenses.push({ id:'e' + Date.now(), date:new Date(p.date).getTime(), amount:Number(p.amount), category:p.category, paidTo:p.paidTo, note:p.note });
+  if (action === 'delExpense') d.expenses = d.expenses.filter(e => e.id !== p.id);
+  if (action === 'order') { const lines = p.items.map(it => { const r = d.rates.find(x => x.item === it.item); return { item:r.item, grams:it.grams, rate:r.p250, amount:priceFor(r, it.grams) }; });
+    const sub = lines.reduce((a, l) => a + l.amount, 0), total = sub + (Number(p.fee) || 0) - (Number(p.discount) || 0), id = 'AZ-W' + (1001 + d.orders.length);
+    d.orders.push({ row:d.orders.length + 2, id, date:Date.now(), name:p.name, email:p.email, phone:p.phone, address:p.address, items:lines.map(l => `${l.item} – ${fg(l.grams)}`).join(', '), qty:lines.reduce((a, l) => a + l.grams, 0),
+      total, notes:p.notes, status:p.status, confirmedOn:p.status === 'Confirmed' ? Date.now() : null, pdf:'', fee:Number(p.fee) || 0, disc:Number(p.discount) || 0, offers:'Added from dashboard (' + p.source + ')', payment:'', lines });
+    extra = { orderId:id, total, invoiced:p.status === 'Confirmed' && !!p.email }; }
+  if (action === 'email') { p.to.forEach(r => d.emails.push({ at:Date.now(), to:r.email, name:r.name, subject:p.subject.replace(/\{first\}/g, (r.name || '').split(' ')[0]), type:p.type, status:p.mode === 'draft' ? 'Draft' : 'Sent' }));
+    extra = { done:p.to.length, failed:[] }; d.config.quota -= p.mode === 'draft' ? 0 : p.to.length; }
+  d.config.loadedAt = Date.now();
+  return Object.assign({ ok:true }, extra, { data:JSON.parse(JSON.stringify(d)) });
+}
+// close copy of the shop's email layout (shell_ in Code.gs), for the demo preview only
+function demoMail(p){
+  const r = { name:'Medha Kulkarni' }, merge = s => String(s || '').replace(/\{name\}/g, r.name).replace(/\{first\}/g, 'Medha');
+  const body = esc(merge(p.body)).split(/\n{2,}/).map(x => `<p style="font-size:14px;line-height:1.6;margin:0 0 12px">${x.replace(/\n/g, '<br>')}</p>`).join('');
+  const rates = (DEMO || demoData()).rates.filter(x => x.available && x.p250 && (!p.priceItems || !p.priceItems.length || p.priceItems.includes(x.item)));
+  const td = 'padding:8px 6px;border-bottom:1px solid #f0e4d4;font-size:14px';
+  const prices = p.prices && rates.length ? `<table style="width:100%;border-collapse:collapse;margin:8px 0 4px"><tr style="background:#F5E8D0"><th style="${td};text-align:left">Today's prices</th><th style="${td};text-align:right">250 g</th><th style="${td};text-align:right">1 kg</th></tr>
+    ${rates.map(x => `<tr><td style="${td}">${esc(x.item)}</td><td style="${td};text-align:right">${x.mkt250 > x.p250 ? `<s style="color:#A08060">${rs(x.mkt250)}</s> ` : ''}<b>${rs(x.p250)}</b></td><td style="${td};text-align:right">${rs(x.p1kg)}</td></tr>`).join('')}</table>` : '';
+  const btn = p.button ? `<div style="text-align:center;margin:18px 0 4px"><a href="#" style="display:inline-block;background:#B5622A;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:15px;font-weight:bold">Order on our website</a></div>` : '';
+  return `<div style="background:#FDF6EC;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;color:#1E1209"><div style="max-width:560px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #eadbc6">
+    <div style="background:#B5622A;color:#FDF6EC;padding:22px 24px"><div style="font-family:Georgia,serif;font-size:26px;font-weight:bold">🌿 Azraah Dry Fruits</div><div style="font-size:12px;opacity:.8;letter-spacing:1px;text-transform:uppercase">Premium quality raw dry fruits</div></div>
+    <div style="padding:24px"><h2 style="margin:0 0 12px;font-size:20px;color:#6B3A12">${esc(merge(p.heading || p.subject))}</h2>${body}${prices}${btn}
+    <p style="font-size:13px;color:#6B4C2A;margin-top:24px">Questions? Reply to this email or call +91 9766801808.</p>
+    <p style="font-size:12px;color:#A08060;font-style:italic;border-top:1px solid #f0e4d4;padding-top:12px;margin-top:16px">🤍 A personal initiative by Gajal and Alim.</p></div></div></div>`;
+}
+
+const LS = { get(k){ try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }, set(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }, del(k){ try { localStorage.removeItem(k); } catch (e) {} } };
+function gateShow(msg){ $('loading').style.display = 'none'; $('gate').style.display = 'flex'; $('g-err').textContent = msg || ''; }
+async function gateGo(){
+  const url = $('g-url').value.trim(), key = $('g-key').value;
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(url)) return gateShow('Paste the full web app URL ending in /exec.');
+  if (!key) return gateShow('Enter the passcode.');
+  CFG.url = url; CFG.key = key; $('gate').style.display = 'none'; $('loading').style.display = '';
+  try {
+    const r = await call('load');
+    LS.set('az_url', url); if ($('g-rem').checked) LS.set('az_key', key); else LS.del('az_key');
+    setData(r.data); $('loading').style.display = 'none';
+  } catch (e) { LS.del('az_key'); gateShow(errMsg(e)); }
+}
+function signOut(){ LS.del('az_key'); location.reload(); }
+function boot(){
+  $('g-url').value = LS.get('az_url') || DEFAULT_URL;
+  const k = LS.get('az_key');
+  if (k && $('g-url').value) { $('g-key').value = k; $('g-rem').checked = true; return gateGo(); }
+  gateShow('');
+}
+boot();
+</script>
+</body>
+</html>
